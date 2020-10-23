@@ -1,0 +1,24 @@
+{
+  "name": "customsitetracker-backend",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "scripts": {
+    "start:staging": "ts-node src/index.ts",
+    "start": "nodemon --watch 'src/**/*.ts' --ignore 'src/**/*.spec.ts' --exec 'ts-node' src/index.ts"
+  },
+  "homepage": "https://github.com/Iqwertz/CustomSiteTracker-Backend#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "nodemon": "^2.0.5",
+    "ts-node": "^9.0.0",
+    "typescript": "^4.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "^14.11.8"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
