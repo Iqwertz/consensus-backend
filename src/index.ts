@@ -91,6 +91,24 @@ app.post("/create", (req, res) => {
   });
 });
 
+app.post("/getPollData", (req, res) => {
+  let reqData: RoomIds = req.body;
+  let fs = require("fs");
+
+  fs.readFile(
+    __dirname + "/data/rooms/" + reqData.roomId + "/poll.txt",
+    function (err, data) {
+      if (err) {
+        throw err;
+      }
+      let fileData: RoomObject = JSON.parse(data.toString());
+      if (fileData.creatorId == reqData.creatorId) {
+        res.json(fileData);
+      }
+    }
+  );
+});
+
 function createRoom(roomData: RoomObject, res) {
   let roomPath: string = __dirname + "/data/rooms/" + roomData.roomId;
   const fs = require("fs");
@@ -101,20 +119,16 @@ function createRoom(roomData: RoomObject, res) {
       throw err;
     }
     console.log("Directory is created.");
-    fs.writeFile(
-      __dirname + "/data/rooms/poll.txt",
-      JSON.stringify(roomData),
-      (err) => {
-        if (err) {
-          throw err;
-        }
-        console.log("file Created");
-        res.json({
-          roomId: roomData.roomId,
-          creatorId: roomData.creatorId,
-        });
+    fs.writeFile(roomPath + "/poll.txt", JSON.stringify(roomData), (err) => {
+      if (err) {
+        throw err;
       }
-    );
+      console.log("file Created");
+      res.json({
+        roomId: roomData.roomId,
+        creatorId: roomData.creatorId,
+      });
+    });
   });
 }
 
