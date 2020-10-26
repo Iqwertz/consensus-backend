@@ -1,0 +1,1 @@
+{"titel":"hpi","creationDate":"2020-10-26T19:11:21.432Z","roomId":"l3tLn7xN","creatorId":"m5sscLiDmX","data":[{"entrydata":"Thu,´8 Oct","date":"2020-10-07T22:00:00.000Z"}]}
