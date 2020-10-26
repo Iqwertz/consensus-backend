@@ -21,14 +21,17 @@ export interface RoomIds {
 export interface roomlistentry {
   entrydata: string;
   date?: Date;
+  votes: string[];
 }
 
 export interface RoomObject {
   titel: string;
+  url: string;
   roomId: string;
   creatorId: string;
   creationDate: Date;
   description: string;
+  parNames: string[];
   data: roomlistentry[];
 }
 
