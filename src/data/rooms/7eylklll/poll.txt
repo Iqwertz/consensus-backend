@@ -1,0 +1,1 @@
+{"titel":"Julius Frage","url":"http://localhost:4200/poll?rId=7eylklll","creationDate":"2020-10-27T08:50:51.534Z","roomId":"7eylklll","creatorId":"2dR8BuhmmC","parNames":[],"data":[{"votes":[],"entrydata":"Eine Frage"},{"votes":[],"entrydata":"Noch eine Frage"},{"votes":[],"entrydata":"Noch eine Frage"}]}

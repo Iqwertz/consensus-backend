@@ -22,6 +22,7 @@ export interface roomlistentry {
   entrydata: string;
   date?: Date;
   votes: string[];
+  id: number;
 }
 
 export interface RoomObject {
@@ -33,6 +34,24 @@ export interface RoomObject {
   description: string;
   parNames: string[];
   data: roomlistentry[];
+}
+
+export interface PollResponse {
+  titel: string;
+  description: string;
+  roomId: string;
+  parNames: string[];
+  data: roomlistentry[];
+}
+
+export interface ServerStatusResponse {
+  serverMessage: string;
+}
+
+export interface NewVote {
+  roomId: string;
+  name: string;
+  voteIds: number[];
 }
 
 let usedIds: RoomIdsLog;
@@ -107,6 +126,67 @@ app.post("/getPollData", (req, res) => {
       let fileData: RoomObject = JSON.parse(data.toString());
       if (fileData.creatorId == reqData.creatorId) {
         res.json(fileData);
+      }
+    }
+  );
+});
+
+app.post("/getPoll", (req, res) => {
+  let reqData = req.body;
+  let fs = require("fs");
+
+  fs.readFile(
+    __dirname + "/data/rooms/" + reqData.roomId + "/poll.txt",
+    function (err, data) {
+      if (err) {
+        throw err;
+      }
+      let fileData: RoomObject = JSON.parse(data.toString());
+      let responseData: PollResponse = {
+        titel: fileData.titel,
+        description: fileData.description,
+        parNames: fileData.parNames,
+        roomId: fileData.roomId,
+        data: fileData.data,
+      };
+      res.json(responseData);
+    }
+  );
+});
+
+app.post("/setVote", (req, res) => {
+  let reqData: NewVote = req.body;
+  let fs = require("fs");
+
+  fs.readFile(
+    __dirname + "/data/rooms/" + reqData.roomId + "/poll.txt",
+    function (err, data) {
+      if (err) {
+        throw err;
+      }
+      let fileData: RoomObject = JSON.parse(data.toString());
+      if (!fileData.parNames.includes(reqData.name)) {
+        fileData.parNames.push(reqData.name);
+        for (let entry of fileData.data) {
+          if (reqData.voteIds.includes(entry.id)) {
+            entry.votes.push(reqData.name);
+          }
+        }
+        let fsw = require("fs");
+
+        fsw.writeFileSync(
+          __dirname + "/data/rooms/" + reqData.roomId + "/poll.txt",
+          JSON.stringify(fileData)
+        );
+        let response: ServerStatusResponse = {
+          serverMessage: "200",
+        };
+        res.json(response);
+      } else {
+        let response: ServerStatusResponse = {
+          serverMessage: "ERR_Name_Exists",
+        };
+        res.json(response);
       }
     }
   );

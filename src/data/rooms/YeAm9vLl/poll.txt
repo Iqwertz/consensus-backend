@@ -1,0 +1,1 @@
+{"titel":"hsiufashuidauidha","url":"http://localhost:4200/poll?rId=YeAm9vLl","description":"aksjdkoasdjokasjdklasnd","creationDate":"2020-10-27T08:54:58.193Z","roomId":"YeAm9vLl","creatorId":"9jWHsR5jqZ","parNames":[],"data":[{"entrydata":"Tue,´6 Oct","date":"2020-10-05T22:00:00.000Z","votes":[]}]}
