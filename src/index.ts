@@ -121,11 +121,24 @@ app.post("/getPollData", (req, res) => {
     __dirname + "/data/rooms/" + reqData.roomId + "/poll.json",
     function (err, data) {
       if (err) {
-        throw err;
-      }
-      let fileData: RoomObject = JSON.parse(data.toString());
-      if (fileData.creatorId == reqData.creatorId) {
-        res.json(fileData);
+        if (err.code == "ENOENT") {
+          res.status(400).send({
+            message: "PollIdNotFound",
+          });
+        } else {
+          res.status(400).send({
+            message: "ServerError",
+          });
+        }
+      } else {
+        let fileData: RoomObject = JSON.parse(data.toString());
+        if (fileData.creatorId == reqData.creatorId) {
+          res.json(fileData);
+        } else {
+          res.status(400).send({
+            message: "PollIdNotFound",
+          });
+        }
       }
     }
   );
@@ -139,17 +152,26 @@ app.post("/getPoll", (req, res) => {
     __dirname + "/data/rooms/" + reqData.roomId + "/poll.json",
     function (err, data) {
       if (err) {
-        throw err;
+        if (err.code == "ENOENT") {
+          res.status(400).send({
+            message: "PollIdNotFound",
+          });
+        } else {
+          res.status(400).send({
+            message: "ServerError",
+          });
+        }
+      } else {
+        let fileData: RoomObject = JSON.parse(data.toString());
+        let responseData: PollResponse = {
+          titel: fileData.titel,
+          description: fileData.description,
+          parNames: fileData.parNames,
+          roomId: fileData.roomId,
+          data: fileData.data,
+        };
+        res.json(responseData);
       }
-      let fileData: RoomObject = JSON.parse(data.toString());
-      let responseData: PollResponse = {
-        titel: fileData.titel,
-        description: fileData.description,
-        parNames: fileData.parNames,
-        roomId: fileData.roomId,
-        data: fileData.data,
-      };
-      res.json(responseData);
     }
   );
 });
@@ -162,31 +184,32 @@ app.post("/setVote", (req, res) => {
     __dirname + "/data/rooms/" + reqData.roomId + "/poll.json",
     function (err, data) {
       if (err) {
-        throw err;
-      }
-      let fileData: RoomObject = JSON.parse(data.toString());
-      if (!fileData.parNames.includes(reqData.name)) {
-        fileData.parNames.push(reqData.name);
-        for (let entry of fileData.data) {
-          if (reqData.voteIds.includes(entry.id)) {
-            entry.votes.push(reqData.name);
-          }
-        }
-        let fsw = require("fs");
-
-        fsw.writeFileSync(
-          __dirname + "/data/rooms/" + reqData.roomId + "/poll.json",
-          JSON.stringify(fileData)
-        );
-        let response: ServerStatusResponse = {
-          serverMessage: "200",
-        };
-        res.json(response);
+        console.log(err);
       } else {
-        let response: ServerStatusResponse = {
-          serverMessage: "ERR_Name_Exists",
-        };
-        res.json(response);
+        let fileData: RoomObject = JSON.parse(data.toString());
+        if (!fileData.parNames.includes(reqData.name)) {
+          fileData.parNames.push(reqData.name);
+          for (let entry of fileData.data) {
+            if (reqData.voteIds.includes(entry.id)) {
+              entry.votes.push(reqData.name);
+            }
+          }
+          let fsw = require("fs");
+
+          fsw.writeFileSync(
+            __dirname + "/data/rooms/" + reqData.roomId + "/poll.json",
+            JSON.stringify(fileData)
+          );
+          let response: ServerStatusResponse = {
+            serverMessage: "200",
+          };
+          res.json(response);
+        } else {
+          let response: ServerStatusResponse = {
+            serverMessage: "ERR_Name_Exists",
+          };
+          res.json(response);
+        }
       }
     }
   );
@@ -204,13 +227,14 @@ function createRoom(roomData: RoomObject, res) {
     console.log("Directory is created.");
     fs.writeFile(roomPath + "/poll.json", JSON.stringify(roomData), (err) => {
       if (err) {
-        throw err;
+        console.log(err);
+      } else {
+        console.log("file Created");
+        res.json({
+          roomId: roomData.roomId,
+          creatorId: roomData.creatorId,
+        });
       }
-      console.log("file Created");
-      res.json({
-        roomId: roomData.roomId,
-        creatorId: roomData.creatorId,
-      });
     });
   });
 }
