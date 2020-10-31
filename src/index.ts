@@ -72,7 +72,7 @@ app.post("/new", (req, res) => {
 
   let fs = require("fs");
 
-  fs.readFile(__dirname + "/data/roomIds.txt", function (err, data) {
+  fs.readFile(__dirname + "/data/roomIds.json", function (err, data) {
     if (err) {
       throw err;
     }
@@ -87,7 +87,7 @@ app.post("/new", (req, res) => {
     let fsw = require("fs");
 
     fsw.writeFile(
-      __dirname + "/data/roomIds.txt",
+      __dirname + "/data/roomIds.json",
       JSON.stringify(fileData),
       (err) => {
         if (err) throw err;
@@ -102,7 +102,7 @@ app.post("/create", (req, res) => {
   let reqData: RoomObject = req.body;
   let fs = require("fs");
 
-  fs.readFile(__dirname + "/data/roomIds.txt", function (err, data) {
+  fs.readFile(__dirname + "/data/roomIds.json", function (err, data) {
     if (err) {
       throw err;
     }
@@ -118,7 +118,7 @@ app.post("/getPollData", (req, res) => {
   let fs = require("fs");
 
   fs.readFile(
-    __dirname + "/data/rooms/" + reqData.roomId + "/poll.txt",
+    __dirname + "/data/rooms/" + reqData.roomId + "/poll.json",
     function (err, data) {
       if (err) {
         throw err;
@@ -136,7 +136,7 @@ app.post("/getPoll", (req, res) => {
   let fs = require("fs");
 
   fs.readFile(
-    __dirname + "/data/rooms/" + reqData.roomId + "/poll.txt",
+    __dirname + "/data/rooms/" + reqData.roomId + "/poll.json",
     function (err, data) {
       if (err) {
         throw err;
@@ -159,7 +159,7 @@ app.post("/setVote", (req, res) => {
   let fs = require("fs");
 
   fs.readFile(
-    __dirname + "/data/rooms/" + reqData.roomId + "/poll.txt",
+    __dirname + "/data/rooms/" + reqData.roomId + "/poll.json",
     function (err, data) {
       if (err) {
         throw err;
@@ -175,7 +175,7 @@ app.post("/setVote", (req, res) => {
         let fsw = require("fs");
 
         fsw.writeFileSync(
-          __dirname + "/data/rooms/" + reqData.roomId + "/poll.txt",
+          __dirname + "/data/rooms/" + reqData.roomId + "/poll.json",
           JSON.stringify(fileData)
         );
         let response: ServerStatusResponse = {
@@ -202,7 +202,7 @@ function createRoom(roomData: RoomObject, res) {
       throw err;
     }
     console.log("Directory is created.");
-    fs.writeFile(roomPath + "/poll.txt", JSON.stringify(roomData), (err) => {
+    fs.writeFile(roomPath + "/poll.json", JSON.stringify(roomData), (err) => {
       if (err) {
         throw err;
       }
