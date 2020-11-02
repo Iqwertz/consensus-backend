@@ -34,6 +34,8 @@ export interface RoomObject {
   description: string;
   parNames: string[];
   data: roomlistentry[];
+  votesVisible: boolean;
+  email?: string;
 }
 
 export interface PollResponse {
@@ -42,6 +44,7 @@ export interface PollResponse {
   roomId: string;
   parNames: string[];
   data: roomlistentry[];
+  votesVisible: boolean;
 }
 
 export interface ServerStatusResponse {
@@ -169,6 +172,7 @@ app.post("/getPoll", (req, res) => {
           parNames: fileData.parNames,
           roomId: fileData.roomId,
           data: fileData.data,
+          votesVisible: fileData.votesVisible,
         };
         res.json(responseData);
       }
@@ -230,6 +234,32 @@ function createRoom(roomData: RoomObject, res) {
         console.log(err);
       } else {
         console.log("file Created");
+        if (roomData.email != "") {
+          let nodemailer = require('nodemailer');
+
+          let transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+              user: 'jkh.55528@gmail.com',
+              pass: ''
+            }
+          });
+
+          let mailOptions = {
+            from: 'youremail@gmail.com',
+            to: 'myfriend@yahoo.com',
+            subject: 'Sending Email using Node.js',
+            text: 'That was easy!'
+          };
+
+          transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+              console.log(error);
+            } else {
+              console.log('Email sent: ' + info.response);
+            }
+          });
+        }
         res.json({
           roomId: roomData.roomId,
           creatorId: roomData.creatorId,
