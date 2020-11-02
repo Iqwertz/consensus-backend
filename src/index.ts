@@ -58,6 +58,13 @@ export interface NewVote {
   voteIds: number[];
 }
 
+export interface UpdateVote {
+  roomId: string;
+  oldName: string;
+  name: string;
+  voteIds: number[];
+}
+
 let usedIds: RoomIdsLog;
 
 app.use(cors());
@@ -192,6 +199,51 @@ app.post("/setVote", (req, res) => {
         console.log(err);
       } else {
         let fileData: RoomObject = JSON.parse(data.toString());
+        if (!fileData.parNames.includes(reqData.name)) {
+          fileData.parNames.push(reqData.name);
+          for (let entry of fileData.data) {
+            if (reqData.voteIds.includes(entry.id)) {
+              entry.votes.push(reqData.name);
+            }
+          }
+          let fsw = require("fs");
+
+          fsw.writeFileSync(
+            __dirname + "/data/rooms/" + reqData.roomId + "/poll.json",
+            JSON.stringify(fileData)
+          );
+          let response: ServerStatusResponse = {
+            serverMessage: "200",
+          };
+          res.json(response);
+        } else {
+          let response: ServerStatusResponse = {
+            serverMessage: "ERR_Name_Exists",
+          };
+          res.json(response);
+        }
+      }
+    }
+  );
+});
+
+app.post("/updateVote", (req, res) => {
+  let reqData: UpdateVote = req.body;
+  let fs = require("fs");
+
+  fs.readFile(
+    __dirname + "/data/rooms/" + reqData.roomId + "/poll.json",
+    function (err, data) {
+      if (err) {
+        console.log(err);
+      } else {
+        let fileData: RoomObject = JSON.parse(data.toString());
+
+        fileData.parNames = fileData.parNames.filter(e => e !== reqData.oldName);
+        for (let entry of fileData.data) {
+          entry.votes = entry.votes.filter(e => e !== reqData.oldName);
+        }
+
         if (!fileData.parNames.includes(reqData.name)) {
           fileData.parNames.push(reqData.name);
           for (let entry of fileData.data) {
