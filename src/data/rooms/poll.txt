@@ -1,1 +1,0 @@
-{"titel":"oad","description":"klnkl","creationDate":"2020-10-26T20:26:35.110Z","roomId":"3vfo4rCm","creatorId":"DuSmnXkjDk","data":[{"entrydata":"Wed,´14 Oct","date":"2020-10-13T22:00:00.000Z"},{"entrydata":"Wed,´21 Oct","date":"2020-10-20T22:00:00.000Z"}]}

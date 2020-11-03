@@ -1,1 +1,0 @@
-{"titel":"Test","description":"BlaBla","creationDate":"2020-10-26T20:59:19.435Z","roomId":"yWC7ydWj","creatorId":"CtxuywYMvc","data":[{"entrydata":"sahdsa"},{"entrydata":"osjdiasjd"},{"entrydata":"skdjasijdk"},{"entrydata":"klsadlkasjdl"},{"entrydata":""}]}

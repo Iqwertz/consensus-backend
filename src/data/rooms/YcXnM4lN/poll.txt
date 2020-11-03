@@ -1,1 +1,0 @@
-{"titel":"klsdlskand","url":"http://localhost:4200poll?rId=YcXnM4lN","creationDate":"2020-10-26T22:06:39.749Z","roomId":"YcXnM4lN","creatorId":"yncpqGrsnS","parNames":[],"data":[]}
