@@ -1,8 +1,5 @@
 import { enviroment } from "./enviroment";
 import * as express from "express";
-import { createBrotliCompress } from "zlib";
-
-const roomStore: Map<string, string> = new Map<string, string>(); //zweiten String mit dem room objekt ersetzen
 
 const cors = require("cors");
 const app = express();
@@ -325,7 +322,8 @@ function getNewRoomId(digits: number) {
   return generatedId;
 }
 
-function getRandomId(digits: number, numbers: boolean, capitalLetter: boolean, letter: boolean): string { //universal function to generate random id
+function getRandomId(digits: number, numbers: boolean, capitalLetter: boolean, letter: boolean): string {
+  //universal function to generate random id
   const nChar = "123456789"; //All: const nChar = "0123456789"; /Removed easy mistaken Id letter
   const cChar = "ABCDEFGHJKLMNPQRSTUVWXYZ"; //All const cChar = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";  / Removed easy mistaken Id letter
   const lChar = "abcdefghijklmnopqrstuvwxyz";
